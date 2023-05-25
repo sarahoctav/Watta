@@ -9,7 +9,7 @@ import Foundation
 import HealthKit
 
 class HealthModel: ObservableObject {
-    
+    static let sharedInstance = HealthModel()
     
     // MARK: Published Properties
     // main store
@@ -144,15 +144,15 @@ class HealthModel: ObservableObject {
         }
 
         let query = HKSampleQuery(sampleType: bodyMassType, predicate: nil, limit: HKObjectQueryNoLimit, sortDescriptors: nil) { query, samples, error in
-            guard let samples = samples as? [HKQuantitySample], let sample = samples.first else {
-                //                    print("Query failed sample -> \(sample)")
-                print("Query failed Weight -> \(error!.localizedDescription)")
-                completion(nil, error)
-                return
-            }
-
-            let bodyWeightInKilograms = sample.quantity.doubleValue(for: .gramUnit(with: .kilo))
             DispatchQueue.main.async {
+                guard let samples = samples as? [HKQuantitySample], let sample = samples.first else {
+                    //                    print("Query failed sample -> \(sample)")
+                    print("Query failed Weight -> \(error!.localizedDescription)")
+                    completion(nil, error)
+                    return
+                }
+                
+                let bodyWeightInKilograms = sample.quantity.doubleValue(for: .gramUnit(with: .kilo))
                 self.bodyWeight = sample.quantity.doubleValue(for: .gramUnit(with: .kilo))
                 self.goal = ((self.bodyWeight - (Constants.Config.weightIndex*2)) * Constants.Config.waterIndex3) + Constants.Config.waterIndex + Constants.Config.waterIndex2
                 // goal update if there is exercise duration
@@ -163,10 +163,13 @@ class HealthModel: ObservableObject {
                     self.goal = ((self.bodyWeight - (Constants.Config.weightIndex*2)) * Constants.Config.waterIndex3) + Constants.Config.waterIndex + Constants.Config.waterIndex2 + increaseAmount
                     
                 }
+                completion(bodyWeightInKilograms, error)
+                
             }
+//            DispatchQueue.main.async {
+//            }
 
 
-            completion(bodyWeightInKilograms, error)
         }
 
         healthStore!.execute(query)

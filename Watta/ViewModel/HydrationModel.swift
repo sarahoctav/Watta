@@ -14,19 +14,24 @@ class HydrationModel: ObservableObject {
     // MARK: - Properties
     
     // date
-    @Published var date:Date
+//    @Published var date:Date
+    @Published var date:Date = Date()
     
     // goal (mL)
-    @Published var goal:Double
+//    @Published var goal:Double
+    @Published var goal:Double = 0.0
     
     // progress double (0.0 to 1.0)
-    @Published var progress:Double
+//    @Published var progress:Double
+    @Published var progress:Double = 0.0
     
     // total intake (mL)
-    @Published var totalIntake:Int
+//    @Published var totalIntake:Int
+    @Published var totalIntake:Int = 0
     
     // goal index : corresponds to body weight
-    @Published var goalIndex:Double
+//    @Published var goalIndex:Double
+    @Published var goalIndex:Double = 0.0
     
     // intake entries
     @Published private(set) var intake:[WaterData] {
@@ -39,21 +44,16 @@ class HydrationModel: ObservableObject {
     
     
     // Health Model
-    @Published var health:HealthModel
+    @Published var health : HealthModel = HealthModel.sharedInstance
     
     
     // MARK: - Initializers
-    
-    // Initializer takes a Health Model
-    init(healthModel: HealthModel) {
+   
+//     Initializer takes a Health Model
+    init() {
         // Default values
-        self.goalIndex = healthModel.bodyWeight
-        self.goal = healthModel.goal
-        self.progress = 0.0
-        self.totalIntake = 0
-        self.health = healthModel
-        self.date = Date()
-        
+//        self.health = HealthModelGlobal.sharedInstance
+
         // Load existing array of entries (it not null)
         if let data = UserDefaults.standard.data(forKey: Constants.Config.saveKey) {
             if let decoded = try? JSONDecoder().decode([WaterData].self, from: data) {
@@ -64,12 +64,12 @@ class HydrationModel: ObservableObject {
         } else {
             self.intake = [WaterData]()
         }
-        
-        
+
+
         // Load last date (if not null) and compare
         if let dateData = UserDefaults.standard.data(forKey: Constants.Config.dateKey) {
             if let decodedDate = try? JSONDecoder().decode(Date.self, from: dateData) {
-                
+
                 // If the last date is not the same date as today, log the data
                 if !Calendar.current.isDateInToday(decodedDate) {
 //                    self.health.saveData(intake: self.intake)
@@ -77,14 +77,14 @@ class HydrationModel: ObservableObject {
                 }
             }
         }
-        
+
         // Load last date (if not null) and compare
         if let goalData = UserDefaults.standard.data(forKey: Constants.Config.goalKey) {
             if let decodedGoalIndex = try? JSONDecoder().decode(Int.self, from: goalData) {
                 self.goalIndex = Double(decodedGoalIndex)
             }
         }
-        
+
         self.updateData()
     }
      
@@ -97,7 +97,7 @@ class HydrationModel: ObservableObject {
         self.progress = 0.0
         self.totalIntake = 0
         self.intake = [WaterData]()
-        self.health = HealthModel()
+        self.health = HealthModel.sharedInstance
         for i in (0..<amounts.count) {
             self.addIntake(amount: amounts[i], drink: 0)
         }
@@ -135,7 +135,10 @@ class HydrationModel: ObservableObject {
     
     // Recalculates to progress double
     func updateProgress() {
-        self.progress = min(Double(totalIntake)/Double(health.goal), 1.0)
+        DispatchQueue.main.async{
+            self.progress = min(Double(self.totalIntake)/Double(self.health.goal), 1.0)
+            
+        }
 
     }
     

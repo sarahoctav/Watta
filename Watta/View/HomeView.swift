@@ -8,16 +8,18 @@
 import SwiftUI
 
 struct HomeView: View {
-    init(hydration:HydrationModel, health:HealthModel  ) {
-        self.hydration = hydration
-        self.health = health
-        UITableView.appearance().backgroundColor = .clear }
-    @ObservedObject var health:HealthModel
-    @ObservedObject var hydration:HydrationModel
+//    init(hydration:HydrationModel, health:HealthModel  ) {
+//        self.hydration = hydration
+//        self.health = health
+//        UITableView.appearance().backgroundColor = .clear }
+    @EnvironmentObject var health : HealthModel
+    @EnvironmentObject var hydration : HydrationModel
+//    @ObservedObject var health:HealthModel
+//    @ObservedObject var hydration:HydrationModel
     @State var addIntakeSheet = false
     @State var phase: CGFloat = 0.0
-    @State var progress: Double = 0.0
-    @State var percent: String = ""
+//    @State var progress: Double = 0.0
+//    @State var percent: String = ""
     
     var body: some View {
         VStack{
@@ -42,7 +44,7 @@ struct HomeView: View {
             ZStack{
                 Image("tear-drop").resizable()
                 GeometryReader { geometry in
-                    WaterWave(progress: self.progress, phase: self.phase)
+                    WaterWave(progress: hydration.progress, phase: self.phase)
                         .fill(AppColor.main_color)
                 }.onAppear(){
                     withAnimation(Animation.linear(duration: 1).repeatForever(autoreverses: false)){
@@ -186,17 +188,17 @@ struct HomeView: View {
                 //                self.exerciseDuration = health.exerciseDuration
                 NotificationModel.instance.setupNotifications()
                 hydration.updateProgress()
-                self.progress = hydration.progress
-                self.percent = (Double(hydration.totalIntake)/health.goal * 100).noTrailingZero()
+//                self.progress = hydration.progress
+//                self.percent = (Double(hydration.totalIntake)/health.goal * 100).noTrailingZero()
             }
         }
         .onChange(of: self.progress){ newValue in
             withAnimation {
                 DispatchQueue.main.async{
                     hydration.updateProgress()
-                    self.progress = hydration.progress
-                    self.percent = (Double(hydration.totalIntake)/health.goal
-                                    * 100).noTrailingZero()
+//                    self.progress = hydration.progress
+//                    self.percent = (Double(hydration.totalIntake)/health.goal
+//                                    * 100).noTrailingZero()
                     
                 }
             }
@@ -207,7 +209,8 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(hydration: Constants.sampleModel, health: HealthModel())
+        HomeView().environmentObject(HealthModel())
+            .environmentObject(HydrationModel())
     }
 }
 
