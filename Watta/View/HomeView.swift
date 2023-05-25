@@ -160,10 +160,6 @@ struct HomeView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             ZStack {
-                //                LinearGradient(
-                //                    colors: [AppColor.main_color,Color.white],
-                //                    startPoint: .bottom, endPoint: .top)
-                //                .edgesIgnoringSafeArea(.all)
                 GeometryReader { geometry in
                     WaterWave(progress: 0.37, applitude:18, phase: 40, normalizedWave: false)
                         .fill(AppColor.main_color)
@@ -185,11 +181,9 @@ struct HomeView: View {
         )
         .onAppear{
             DispatchQueue.main.async{
-                //                self.exerciseDuration = health.exerciseDuration
                 NotificationModel.instance.setupNotifications()
                 hydration.updateProgress()
                 self.progress = hydration.progress
-//                self.percent = (Double(hydration.totalIntake)/health.goal * 100).noTrailingZero()
             }
         }
         .onChange(of: self.progress){ newValue in

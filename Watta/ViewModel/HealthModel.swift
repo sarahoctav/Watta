@@ -166,13 +166,7 @@ class HealthModel: ObservableObject {
                 completion(bodyWeightInKilograms, error)
                 
             }
-//            DispatchQueue.main.async {
-//            }
-
-
         }
-
         healthStore!.execute(query)
     }
-    
 }
