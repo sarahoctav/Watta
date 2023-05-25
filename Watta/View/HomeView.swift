@@ -18,7 +18,7 @@ struct HomeView: View {
 //    @ObservedObject var hydration:HydrationModel
     @State var addIntakeSheet = false
     @State var phase: CGFloat = 0.0
-//    @State var progress: Double = 0.0
+    @State var progress: Double = 0.0
 //    @State var percent: String = ""
     
     var body: some View {
@@ -188,7 +188,7 @@ struct HomeView: View {
                 //                self.exerciseDuration = health.exerciseDuration
                 NotificationModel.instance.setupNotifications()
                 hydration.updateProgress()
-//                self.progress = hydration.progress
+                self.progress = hydration.progress
 //                self.percent = (Double(hydration.totalIntake)/health.goal * 100).noTrailingZero()
             }
         }
@@ -196,9 +196,7 @@ struct HomeView: View {
             withAnimation {
                 DispatchQueue.main.async{
                     hydration.updateProgress()
-//                    self.progress = hydration.progress
-//                    self.percent = (Double(hydration.totalIntake)/health.goal
-//                                    * 100).noTrailingZero()
+                    self.progress = hydration.progress
                     
                 }
             }
