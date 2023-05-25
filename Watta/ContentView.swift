@@ -8,14 +8,26 @@
 import SwiftUI
 
 struct ContentView: View {
+    private var health: HealthModel
+    private var hydration: HydrationModel
+    
+    init() {
+        health = HealthModel()
+        hydration = HydrationModel(healthModel: health)
+    }
+    
     var body: some View {
-        VStack {
-            Image(systemName: "arrow.up")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Test!")
+        VStack{
+            HomeView(hydration: hydration, health: health)
+        }.onAppear {
+            // On appearance, request authorization of HealthKit
+            /// (App works without authorization)
+            health.requestAuthorization { success in
+                if !success {
+                    print("Access not granted!")
+                }
+            }
         }
-        .padding()
     }
 }
 
