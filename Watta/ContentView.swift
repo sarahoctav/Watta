@@ -8,15 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
-//    private var health: HealthModel
-//    private var hydration: HydrationModel
     
     @EnvironmentObject var health : HealthModel
     @EnvironmentObject var hydration : HydrationModel
-//    init() {
-//        health = HealthModel()
-//        hydration = HydrationModel(healthModel: health)
-//    }
     
     var body: some View {
         VStack{

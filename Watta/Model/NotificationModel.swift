@@ -58,24 +58,4 @@ struct NotificationModel {
         }
         
     }
-    
-    // MARK: - exercise notification
-    func scheduleNotification() {
-        let content = UNMutableNotificationContent()
-        content.title = "You've been exercised 🙌🏻"
-        content.body = "Maintain the balance of your body fluids with water💧"
-        content.sound = UNNotificationSound.default
-        
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false) // Trigger notification immediately
-        
-        let request = UNNotificationRequest(identifier: "exerciseMilestone", content: content, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("Failed to schedule notification: \(error)")
-            } else {
-                print("Notification scheduled")
-            }
-        }
-    }
 }

@@ -43,8 +43,6 @@ class HydrationModel: ObservableObject {
     
     
     // MARK: - Initializers
-    
-    //     Initializer takes a Health Model
     init() {
         // Load existing array of entries (it not null)
         if let data = UserDefaults.standard.data(forKey: Constants.Config.saveKey) {
@@ -98,7 +96,7 @@ class HydrationModel: ObservableObject {
     
     // MARK: - Model Functions
     
-    // Save
+    // Save on user defaults
     private func save() {
         if let encoded = try? JSONEncoder().encode(intake) {
             UserDefaults.standard.set(encoded, forKey: Constants.Config.saveKey)

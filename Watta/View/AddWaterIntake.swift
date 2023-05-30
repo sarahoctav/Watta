@@ -90,6 +90,7 @@ struct AddWaterIntake: View {
                 }
             }
         }
+        .background(Color.white.edgesIgnoringSafeArea(.all))
         
         
     }

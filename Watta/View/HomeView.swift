@@ -8,18 +8,11 @@
 import SwiftUI
 
 struct HomeView: View {
-//    init(hydration:HydrationModel, health:HealthModel  ) {
-//        self.hydration = hydration
-//        self.health = health
-//        UITableView.appearance().backgroundColor = .clear }
     @EnvironmentObject var health : HealthModel
     @EnvironmentObject var hydration : HydrationModel
-//    @ObservedObject var health:HealthModel
-//    @ObservedObject var hydration:HydrationModel
     @State var addIntakeSheet = false
     @State var phase: CGFloat = 0.0
     @State var progress: Double = 0.0
-//    @State var percent: String = ""
     
     var body: some View {
         VStack{
@@ -153,6 +146,7 @@ struct HomeView: View {
             .padding(.bottom)
             .sheet(isPresented: $addIntakeSheet, content: {
                 AddWaterIntake(hydration: hydration)
+                
             })
             
             
@@ -160,6 +154,7 @@ struct HomeView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             ZStack {
+                Color.white.edgesIgnoringSafeArea(.all)
                 GeometryReader { geometry in
                     WaterWave(progress: 0.37, applitude:18, phase: 40, normalizedWave: false)
                         .fill(AppColor.main_color)
@@ -191,11 +186,9 @@ struct HomeView: View {
                 DispatchQueue.main.async{
                     hydration.updateProgress()
                     self.progress = hydration.progress
-                    
                 }
             }
         }
-        
     }
 }
 
