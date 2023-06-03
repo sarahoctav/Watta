@@ -32,7 +32,8 @@ struct NotificationModel {
                         var dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
                         dateComponents.hour = 8 // Start from 8 am
                         dateComponents.minute = 0
-                        for i in 0..<12 {
+                        // seven notifications
+                        for i in 0..<7 {
                             let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
                             
                             let request = UNNotificationRequest(identifier: "notification\(i)", content: content, trigger: trigger)
@@ -44,8 +45,6 @@ struct NotificationModel {
                                     print("Notification scheduled for \(dateComponents.hour ?? 0):\(dateComponents.minute ?? 0)")
                                 }
                             }
-                            
-                            
                             // Increment dateComponents by 2 hours
                             dateComponents.hour? += 2
                         }
